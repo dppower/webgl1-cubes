@@ -1,5 +1,8 @@
 build/app
 build/textures
+build/game-data
+build/server
+server/gltf-schema
 node_modules/
 app/shaders
 obj/
