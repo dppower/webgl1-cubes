@@ -18,6 +18,8 @@
     <NodeExeArguments>..\build\server.js</NodeExeArguments>
     <NodejsPort>3000</NodejsPort>
     <StartWebBrowser>True</StartWebBrowser>
+    <ToolsVersionPromptShown>0.0</ToolsVersionPromptShown>
+    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -32,11 +34,11 @@
     <TypeScriptCompile Include="input-manager.ts" />
     <TypeScriptCompile Include="main-canvas.component.ts" />
     <TypeScriptCompile Include="main.ts" />
-    <TypeScriptCompile Include="mat4.ts" />
+    <TypeScriptCompile Include="maths\mat4.ts" />
     <TypeScriptCompile Include="mesh.ts" />
     <TypeScriptCompile Include="object-buffer.ts" />
     <TypeScriptCompile Include="pixel-target-renderer.ts" />
-    <TypeScriptCompile Include="quaternion.ts" />
+    <TypeScriptCompile Include="maths\quaternion.ts" />
     <TypeScriptCompile Include="render-context.ts" />
     <TypeScriptCompile Include="render-object.ts" />
     <TypeScriptCompile Include="scene-renderer.ts" />
@@ -50,10 +52,11 @@
     <TypeScriptCompile Include="skybox.ts" />
     <TypeScriptCompile Include="texture-2d.ts" />
     <TypeScriptCompile Include="transform.ts" />
-    <TypeScriptCompile Include="vec3.ts" />
+    <TypeScriptCompile Include="maths\vec3.ts" />
     <TypeScriptCompile Include="webgl2.d.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="maths\" />
     <Folder Include="shaders\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />

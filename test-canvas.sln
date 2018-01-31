@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "test-canvas", "test-canvas.njsproj", "{319459DD-0366-40C8-934F-8440822EC98E}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "test-canvas", "app\test-canvas.njsproj", "{319459DD-0366-40C8-934F-8440822EC98E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BDAACF76-70D2-4A6A-82A3-603CF91494DA}
 	EndGlobalSection
 EndGlobal
