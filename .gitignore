@@ -1,6 +1,6 @@
-build
-node_modules
-obj
-bin
-glsl
-.vs
+build/
+build-aot/
+node_modules/
+obj/
+bin/
+.vs/
