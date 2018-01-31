@@ -1,7 +1,6 @@
-///<reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
-///<reference path="./webgl2.d.ts" />
+import { enableProdMode } from "@angular/core";
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { AppModule } from "./app.module";
 
-import {bootstrap} from "@angular/platform-browser-dynamic";
-import {AppComponent} from "./app.component";
-
-bootstrap(AppComponent);
+//enableProdMode();
+platformBrowserDynamic().bootstrapModule(AppModule);
