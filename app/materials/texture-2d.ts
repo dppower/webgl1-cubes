@@ -7,7 +7,7 @@ export class Texture2d {
 
     private texture_id: WebGLTexture;
 
-    constructor(public width: number, public height: number, private gl: WebGL2RenderingContext) {
+    constructor(public width: number, public height: number, private gl: WebGLRenderingContext) {
         this.texture_id = this.gl.createTexture();
     };
 

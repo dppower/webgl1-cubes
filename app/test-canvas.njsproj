@@ -28,7 +28,6 @@
     <TypeScriptCompile Include="app.component.ts" />
     <TypeScriptCompile Include="app.module.ts" />
     <TypeScriptCompile Include="canvas\canvas-controller.directive.ts" />
-    <TypeScriptCompile Include="canvas\canvas-dimensions.directive.ts" />
     <TypeScriptCompile Include="canvas\canvas.module.ts" />
     <TypeScriptCompile Include="canvas\game-camera.ts" />
     <TypeScriptCompile Include="canvas\input-manager.ts" />
@@ -53,6 +52,15 @@
     <TypeScriptCompile Include="shaders\shader.ts" />
     <TypeScriptCompile Include="maths\vec3.ts" />
     <TypeScriptCompile Include="webgl\render-context.ts" />
+    <TypeScriptCompile Include="webgl\webgl-tokens.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="webgl\webgl.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="webgl\webgl.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="canvas\" />
