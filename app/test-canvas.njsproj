@@ -47,8 +47,14 @@
     <TypeScriptCompile Include="renderers\pixel-target-renderer.ts" />
     <TypeScriptCompile Include="renderers\scene-renderer.ts" />
     <TypeScriptCompile Include="renderers\sky-model.ts" />
-    <TypeScriptCompile Include="renderers\skybox.ts" />
+    <TypeScriptCompile Include="materials\skybox.ts" />
+    <TypeScriptCompile Include="shaders\active-program-attributes.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="shaders\shader-program.ts" />
+    <TypeScriptCompile Include="shaders\shader-providers.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="shaders\shader.ts" />
     <TypeScriptCompile Include="maths\vec3.ts" />
     <TypeScriptCompile Include="webgl\render-context.ts" />

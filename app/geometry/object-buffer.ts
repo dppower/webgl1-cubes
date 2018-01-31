@@ -13,7 +13,7 @@ export class ObjectBuffer {
     private vertex_color_buffer: WebGLBuffer;
     private texture_coordinates_buffer: WebGLBuffer;
 
-    constructor(@Inject(webgl2_context) private gl: WebGL2RenderingContext) { };
+    constructor(@Inject(webgl2_context) private gl: WebGLRenderingContext) { };
 
     initVertexArray(mesh: Mesh, shader_program: ShaderProgram) {
 
