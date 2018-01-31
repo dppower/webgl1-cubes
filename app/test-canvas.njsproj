@@ -35,6 +35,7 @@
     <TypeScriptCompile Include="main-canvas.component.ts" />
     <TypeScriptCompile Include="main.ts" />
     <TypeScriptCompile Include="maths\mat4.ts" />
+    <TypeScriptCompile Include="maths\vec2.ts" />
     <TypeScriptCompile Include="mesh.ts" />
     <TypeScriptCompile Include="object-buffer.ts" />
     <TypeScriptCompile Include="pixel-target-renderer.ts" />

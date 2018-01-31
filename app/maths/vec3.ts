@@ -1,27 +1,22 @@
 export class Vec3 {
-    constructor(x = 0.0, y = 0.0, z = 0.0) {
-        this.vector_ = new Float32Array([x, y, z]);
-    };
 
     get x() { return this.vector_[0]; };
-
     get y() { return this.vector_[1]; };
-
     get z() { return this.vector_[2]; };
 
-    set x(value: number) { this.vector_[0] = value; };
-
-    set y(value: number) { this.vector_[1] = value; };
-
-    set z(value: number) { this.vector_[2] = value; };
-
-    //get array() { return this.vector_; };
-
-    get length() {
-        return Math.sqrt(this.squaredLength);
+    get array() {
+        return this.vector_;
     };
 
-    get squaredLength() {
+    get from_array() {
+        return Array.from(this.vector_);
+    };
+
+    get length() {
+        return Math.sqrt(this.squared_length);
+    };
+
+    get squared_length() {
         return Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2);
     };
 
@@ -29,6 +24,22 @@ export class Vec3 {
         return Math.abs(this.x) > Math.abs(this.z) ?
             new Vec3(-this.y, this.x, 0.0) :
             new Vec3(0.0, -this.z, this.y);
+    };
+
+    set x(value: number) { this.vector_[0] = value; };
+    set y(value: number) { this.vector_[1] = value; };
+    set z(value: number) { this.vector_[2] = value; };
+
+    constructor(x = 0.0, y = 0.0, z = 0.0) {
+        this.vector_ = new Float32Array([x, y, z]);
+    };
+
+    static fromArray(array: number[]) {
+        let vector = new Vec3();
+        vector.x = array[0] || 0.0;
+        vector.y = array[1] || 0.0;
+        vector.z = array[2] || 0.0;
+        return vector;
     };
 
     dot(a: Vec3) {

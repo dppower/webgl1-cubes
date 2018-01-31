@@ -1,13 +1,29 @@
-import {Vec3} from "./vec3";
-import {Quaternion} from "./quaternion";
+import { Vec3 } from "./vec3";
+import { Quaternion } from "./quaternion";
 
 export class Mat4 {
 
-    constructor() { };
+    get array() { return this.matrix_; };
 
-    get array() {
-        return this.matrix_;
+    get mat3() {
+        return [
+            this.matrix_[0],
+            this.matrix_[1],
+            this.matrix_[2],
+            this.matrix_[4],
+            this.matrix_[5],
+            this.matrix_[6],
+            this.matrix_[8],
+            this.matrix_[9],
+            this.matrix_[10]
+        ]
     };
+
+    get length() { return this.matrix_.length; };
+
+    private matrix_ = new Float32Array(16);
+
+    constructor() { };
 
     identity() {
         this.matrix_[0] = 1.0;
@@ -28,6 +44,10 @@ export class Mat4 {
         this.matrix_[15] = 1.0;
     };
 
+    setArray(value: ArrayLike<number>) {
+        this.matrix_.set(value);
+    };
+
     static multiply(a: Mat4, b: Mat4, out: Mat4) {
         
         let a11 = a.array[0], a21 = a.array[1], a31 = a.array[2], a41 = a.array[3],
@@ -44,6 +64,11 @@ export class Mat4 {
         }
     };
 
+    /**
+     * Creates Rotation matrix from identity Mat4
+     * @param q
+     * @param out
+     */
     static fromQuaternion(q: Quaternion, out: Mat4) {
         q.normalise();
         const n = 2;
@@ -60,7 +85,7 @@ export class Mat4 {
         out.array[0] = 1.0 - (yy + zz);
         out.array[1] = xy + wz;
         out.array[2] = xz - wy;
-
+        
         out.array[4] = xy - wz;
         out.array[5] = 1.0 - (xx + zz);
         out.array[6] = yz + wx;
@@ -75,19 +100,59 @@ export class Mat4 {
         out.array[15] = 1;
     };
 
+    /**
+     * Creates translation matrix from identity Mat4
+     * @param translation
+     * @param out
+     */
     static fromTranslation(translation: Vec3, out: Mat4) {
         out.array[12] = translation.x;
         out.array[13] = translation.y;
         out.array[14] = translation.z;
     };
 
-    /* This is a shortcut method to find the inverse:
-     * M^-1 = [(P^-1) (-P^-1 * V)]
-     *        [    0           1 ]
-     * @param out = the inverse of an affine transformation matrix
+    /**
+     * Creates scale matrix from zero-filled Mat4
+     * @param scale
+     * @param out
+     */
+    static fromScale(scale: Vec3, out: Mat4) {
+        out.array[0] = scale.x;
+        out.array[5] = scale.y;
+        out.array[10] = scale.z;
+        out.array[15] = 1;
+    };
+
+    transpose(out: Mat4) {
+        out.array[0] = this.matrix_[0];
+        out.array[5] = this.matrix_[5];
+        out.array[10] = this.matrix_[10];
+        out.array[15] = this.matrix_[15];
+
+        out.array[1] = this.matrix_[4];
+        out.array[2] = this.matrix_[8];
+        out.array[3] = this.matrix_[12];
+
+        out.array[4] = this.matrix_[1];
+        out.array[6] = this.matrix_[9];
+        out.array[7] = this.matrix_[13];
+
+        out.array[8] = this.matrix_[2];
+        out.array[9] = this.matrix_[6];
+        out.array[11] = this.matrix_[14];
+
+        out.array[12] = this.matrix_[3];
+        out.array[13] = this.matrix_[7];
+        out.array[14] = this.matrix_[11];
+    };
+
+    /**
+     * This is a shortcut method to find the inverse
+     * [(P^-1) (-P^-1 * V)]
+     * [    0           1 ]
+     * @param out
      */
     inverse(out: Mat4) {
-
         // Reset bottom row
         out.array[3] = 0.0;
         out.array[7] = 0.0;
@@ -112,10 +177,11 @@ export class Mat4 {
     };
 
     toString() {
-        return "\n[" + this.matrix_[0] + ", " + this.matrix_[4] + ", " + this.matrix_[8] + ", " + this.matrix_[12] + ",\n" +
-            this.matrix_[1] + ", " + this.matrix_[5] + ", " + this.matrix_[9] + ", " + this.matrix_[13] + ",\n" +
-            this.matrix_[2] + ", " + this.matrix_[6] + ", " + this.matrix_[10] + ", " + this.matrix_[14] + ",\n" +
-            this.matrix_[3] + ", " + this.matrix_[7] + ", " + this.matrix_[11] + ", " + this.matrix_[15] + "]";
+        return `
+            ${this.matrix_[0]}, ${this.matrix_[4]}, ${this.matrix_[8]}, ${this.matrix_[12]},
+            ${this.matrix_[1]}, ${this.matrix_[5]}, ${this.matrix_[9]}, ${this.matrix_[13]},
+            ${this.matrix_[2]}, ${this.matrix_[6]}, ${this.matrix_[10]}, ${this.matrix_[14]},
+            ${this.matrix_[3]}, ${this.matrix_[7]}, ${this.matrix_[11]}, ${this.matrix_[15]}`;
     };
 
     transformPoint(vec: Vec3) {
@@ -139,6 +205,4 @@ export class Mat4 {
 
         return r;
     };
-
-    private matrix_ = new Float32Array(16);
 };
