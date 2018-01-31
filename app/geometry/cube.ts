@@ -1,29 +1,31 @@
-import { Injectable, Inject, provide, OpaqueToken, Injector } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 
-import { Transform } from "./transform";
-import { Vec3 } from "./vec3";
-import { Quaternion } from "./quaternion";
-import { CubeMesh } from "./cube-mesh";
-import { ShaderProgram } from "./shader-program";
-import { Camera } from "./game-camera";
+import { RenderObject } from "./render-object";
+import { ObjectBuffer } from "./object-buffer";
+//import { Transform } from "./transform";
+//import { Vec3 } from "../maths/vec3";
+//import { Quaternion } from "./quaternion";
+//import { CubeMesh } from "./cube-mesh";
+import { ShaderProgram } from "../shaders/shader-program";
+//import { Camera } from "./game-camera";
 
 @Injectable()
-export class Cube {
+export class Cube extends RenderObject {
 
-    get name() {
-        return this.token_.toString();
-    };
+    //get name() {
+    //    return this.token_.toString();
+    //};
 
-    get transform() {
-        return this.transform_;
-    };
+    //get transform() {
+    //    return this.transform_;
+    //};
 
-    private transform_: Transform;
+    //private transform_: Transform;
     private uniform_colour_ = new Float32Array([1.0, 1.0, 1.0, 1.0]);
 
-    constructor(private token_: OpaqueToken, position = new Vec3(0.0, 0.0, 0.0)) {
-
-        this.transform_ = new Transform(position);
+    constructor(/*private token_: OpaqueToken,*/ object_buffer: ObjectBuffer, position?: number[], rotation?: number[]) {
+        super(object_buffer, position, rotation);
+        //this.transform_ = new Transform(position);
     };
 
     /**
@@ -33,11 +35,7 @@ export class Cube {
         this.uniform_colour_.set(color);
     };
 
-
-    Start(gl: WebGLRenderingContext) {
-
-
-
+    loadTexture(gl: WebGLRenderingContext) {
         //this.texture_ = gl.createTexture();
         //let texture = new Image();
         //texture.onload = () => {
@@ -53,21 +51,26 @@ export class Cube {
         //texture.src = "textures/cube-texture.png";
     };
 
-    Update(dt: number) {
-        this.transform_.update();
+    update(dt: number) {
+        this.transform_.updateTransform();
     };
 
+    drawObject(gl: WebGLRenderingContext, shader_program: ShaderProgram) {
+        //shader_program.useProgram(gl);
+        this.object_buffer_.bindVertexArray(shader_program);
+
+    };
 };
 
 //const cubes = new Map<OpaqueToken, Cube>();
 
-const cubes = new OpaqueToken("cubes");
+//const cubes = new OpaqueToken("cubes");
 
-const cube_001 = new OpaqueToken("cube-001");
-const cube_002 = new OpaqueToken("cube-002");
-const cube_003 = new OpaqueToken("cube-003");
+//const cube_001 = new OpaqueToken("cube-001");
+//const cube_002 = new OpaqueToken("cube-002");
+//const cube_003 = new OpaqueToken("cube-003");
 
-export const cubes_provider = provide(cubes, { useValue: [cube_001, cube_002, cube_003] });
+//export const cubes_provider = provide(cubes, { useValue: [cube_001, cube_002, cube_003] });
 
 //const cube_factory = (position: Vec3, colour: Float32Array, token: OpaqueToken) => {
 //    return (injector: Injector) => {

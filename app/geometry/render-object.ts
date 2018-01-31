@@ -1,31 +1,24 @@
-import { OpaqueToken } from "@angular/core";
-
 import { ObjectBuffer } from "./object-buffer";
 import { Transform } from "./transform";
-import { ShaderProgram } from "./shader-program";
-import { Vec3 } from "./vec3";
+import { ShaderProgram } from "../shaders/shader-program";
 
 export abstract class RenderObject {
-
-    get id() {
-        return this.token_.toString();
-    };
-
+    
     get transform() {
         return this.transform_;
     };
 
-    private transform_: Transform;
+    protected transform_: Transform;
     
-
-    constructor(private token_: OpaqueToken, private object_buffer_: ObjectBuffer, position = new Vec3(0.0, 0.0, 0.0)) { };
-
-    initObject() { };
-    
-    drawObject(gl: WebGL2RenderingContext, camera: Camera, shader_program: ShaderProgram) {
-        // Contains all the vertex data for this object
-        this.object_buffer_.bindVertexArray();
-
-
+    constructor(protected object_buffer_: ObjectBuffer, position = [0, 0, 0], rotation = [0, 0, 0, 1]) {
+        this.transform_ = new Transform(position, rotation);
     };
+
+    abstract drawObject(gl: WebGLRenderingContext, shader_program: ShaderProgram): void;
+    //drawObject(gl: WebGL2RenderingContext, camera: Camera, shader_program: ShaderProgram) {
+    //    // Contains all the vertex data for this object
+    //    this.object_buffer_.bindVertexArray();
+
+
+    //};
 };
