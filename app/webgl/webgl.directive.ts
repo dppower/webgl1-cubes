@@ -1,10 +1,12 @@
-﻿import { Directive, ElementRef, HostListener, Inject } from "@angular/core";
+﻿import { Directive, ElementRef, HostListener, Inject, Injector, StaticProvider } from "@angular/core";
 
 import { Subscription } from "rxjs/Subscription";
-//import { MainCamera } from "../canvas/main-camera";
-import { InputManager } from "../canvas/input-manager";
+import { SceneRenderer } from "../renderers/scene-renderer";
+import { MainCamera } from "../canvas/main-camera";
 import { RenderLoop } from "../canvas/render-loop";
-import { WEBGL_EXTENSIONS } from "./webgl-tokens";
+import { WEBGL, WEBGL_EXTENSIONS } from "./webgl-tokens";
+import { UNIFORM_SHADER, SHADER_PROVIDERS } from "../shaders/shader-providers";
+import { CUBE_PROVIDERS, CUBES } from "../geometry/cube-providers";
 
 @Directive({
     selector: "[webgl]"
@@ -16,7 +18,9 @@ export class WebglDirective {
 
     private render_context_: WebGLRenderingContext;
 
-    //private scene_renderer_: SceneRenderer;
+    private webgl_injector_: Injector;
+
+    private scene_renderer_: SceneRenderer;
     //private pixel_target_renderer: PixelTargetRenderer;
     //private atmosphere_model: AtmosphereModel;
 
@@ -24,7 +28,8 @@ export class WebglDirective {
     private render_sub_: Subscription;
 
     constructor(private canvas_ref_: ElementRef, private render_loop_: RenderLoop,
-        @Inject(WEBGL_EXTENSIONS) private webgl_extensions_: string[]
+        @Inject(WEBGL_EXTENSIONS) private webgl_extensions_: string[],
+        private parent_injector_: Injector
     ) { };
 
     @HostListener("webglcontextlost", ["$event"])
@@ -59,14 +64,22 @@ export class WebglDirective {
             this.render_context_.enable(this.render_context_.DEPTH_TEST);
             this.render_context_.depthFunc(this.render_context_.LEQUAL);
 
+            let providers: StaticProvider[] = [
+                { provide: WEBGL, useValue: this.render_context_ },
+                {
+                    provide: SceneRenderer,
+                    useClass: SceneRenderer,
+                    deps: [WEBGL, UNIFORM_SHADER, CUBES, MainCamera]
+                },
+                ...SHADER_PROVIDERS,
+                ...CUBE_PROVIDERS
+            ];
+
+            this.webgl_injector_ = Injector.create(providers, this.parent_injector_);
+            this.scene_renderer_ = this.webgl_injector_.get(SceneRenderer);
             //this.pixel_target_renderer.createFramebuffer();
             //this.atmosphere_model.preRenderTextures();
-            //this.gltf_loader_.fetchGLTFData(this.gltf_path_ + this.gltf_file_, this.render_context_).subscribe(
-            //    (result) => {
-            //        this.scene_renderer_ = this.gltf_loader_.getItem(SceneRenderer);
-            //        this.begin();
-            //    }
-            //)
+            this.begin();
             return true;
         }
         else {
@@ -76,32 +89,32 @@ export class WebglDirective {
     };
 
     begin() {
-        //this.scene_renderer_.constructScene();
+        this.scene_renderer_.initScene();
         this.update_sub_ = this.render_loop_.update_events
             .subscribe((dt) => {
-                this.update(dt);
+                this.updateContext(dt);
             });
 
         this.render_sub_ = this.render_loop_.render_events
             .subscribe((factor) => {
-                this.draw();
+                this.drawContext();
             });
 
         this.render_loop_.begin();
     };
 
-    update(dt: number) {
-        //this.scene_renderer_.updateScene(dt);
+    updateContext(dt: number) {
+        this.scene_renderer_.updateScene(dt);
         //this.pixel_target_renderer.getMouseTarget(canvas_width, canvas_height);
     };
 
-    draw() {
+    drawContext() {
         this.render_context_.clear(this.render_context_.COLOR_BUFFER_BIT | this.render_context_.DEPTH_BUFFER_BIT);
         this.render_context_.viewport(
             0, 0, this.render_context_.drawingBufferWidth, this.render_context_.drawingBufferHeight
         );
 
-        //this.scene_renderer_.drawObjects();
+        this.scene_renderer_.drawScene();
         //this.atmosphere_model.renderSky(camera);
     };
 

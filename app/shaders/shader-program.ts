@@ -1,22 +1,8 @@
-import { Inject, Injectable/*, Injector, provide, OpaqueToken*/ } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 
-//import { webgl2_context } from "./render-context";
 import { WEBGL } from "../webgl/webgl-tokens";
 import { ShaderType, compileShader, VertexShaderSource, FragmentShaderSource } from "./shader";
 import { ActiveProgramAttributes } from "./active-program-attributes";
-
-//import diffuse_uniform_color_fs from "./shaders/diffuse-uniform-color.fs";
-//import diffuse_uniform_color_vs from "./shaders/diffuse-uniform-color.vs";
-
-//import uniform_color_fs from "./shaders/uniform-color.fs";
-//import uniform_color_vs from "./shaders/uniform-color.vs";
-
-//import sky_quad_vs from "./shaders/sky-quad.vs";
-//import sky_quad_fs from "./shaders/sky-quad.fs";
-//import texture_2d_vs from "./shaders/texture-2d.vs";
-//import texture_cube_vs from "./shaders/texture-cube.vs";
-//import transmittance_fs from "./shaders/transmittance.fs";
-//import inscatter_fs from "./shaders/inscattering.fs";
 
 @Injectable()
 export class ShaderProgram {
@@ -108,27 +94,3 @@ export class ShaderProgram {
         });
     };
 }
-
-//let shader_program_factory = (vertex_source: VertexShaderSource, fragment_source: FragmentShaderSource) => {
-//    return (injector: Injector, counter: ActiveProgramAttributes) => {
-//        let gl = injector.get(webgl2_context);
-//        return new ShaderProgram(gl, vertex_source, fragment_source, counter);
-//    }
-//};
-
-//export const diffuse_uniform_shader = new OpaqueToken("diffuse-uniform-color-shader");
-//export const uniform_color_shader = new OpaqueToken("diffuse-uniform-color-shader");
-////export const SKYBOX_SHADER = new OpaqueToken("skybox-shader");
-////export const TRANSMITTANCE_SHADER = new OpaqueToken("transmittance-shader");
-////export const INSCATTER_SHADER = new OpaqueToken("inscatter-shader");
-////export const SKYQUAD_SHADER = new OpaqueToken("skyquad-shader");
-
-//export const shader_providers = [
-//    ActiveProgramAttributes,
-//    provide(uniform_color_shader, { useFactory: shader_program_factory(uniform_color_vs, uniform_color_fs), deps: [Injector, webgl2_context, ActiveProgramAttributes] }),
-//    provide(diffuse_uniform_shader, { useFactory: shader_program_factory(uniform_color_vs, diffuse_uniform_color_fs), deps: [Injector, webgl2_context, ActiveProgramAttributes] }),
-//    //provide(SKYBOX_SHADER, { useFactory: shaderProgramFactory(vert_skybox, frag_skybox), deps: [RenderContext, ActiveProgramAttributes] }),
-//    //provide(TRANSMITTANCE_SHADER, { useFactory: shaderProgramFactory(texture_2d_vs, transmittance_fs), deps: [RenderContext, ActiveProgramAttributes] }),
-//    //provide(INSCATTER_SHADER, { useFactory: shaderProgramFactory(texture_cube_vs, inscatter_fs), deps: [RenderContext, ActiveProgramAttributes] }),
-//    //provide(SKYQUAD_SHADER, { useFactory: shaderProgramFactory(sky_quad_vs, sky_quad_fs), deps: [RenderContext, ActiveProgramAttributes] })
-//]

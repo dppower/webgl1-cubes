@@ -15,10 +15,4 @@ export abstract class RenderObject {
     };
 
     abstract drawObject(gl: WebGLRenderingContext, shader_program: ShaderProgram): void;
-    //drawObject(gl: WebGL2RenderingContext, camera: Camera, shader_program: ShaderProgram) {
-    //    // Contains all the vertex data for this object
-    //    this.object_buffer_.bindVertexArray();
-
-
-    //};
 };

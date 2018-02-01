@@ -17,7 +17,7 @@ export const SHADER_PROVIDERS: StaticProvider[] = [
             attributes: ["aVertexPosition", "aNormal"],
             uniforms: ["uView", "uProjection", "uTransform"],
             source: `
-            #version 100 es
+            #version 100
             attribute vec3 aVertexPosition;
             attribute vec3 aNormal;
             //attribute vec2 aTextureCoordinates;
@@ -40,14 +40,15 @@ export const SHADER_PROVIDERS: StaticProvider[] = [
     {
         provide: FRAGMENT_SHADER, useValue: {
             attributes: [],
-            uniforms: [],
+            uniforms: ["uBaseColor"],
             source: `
-            #version 100 es
+            #version 100
             precision mediump float;    
             const float PI = 3.14159265358979323846;
             const vec4 ambient = vec4(0.1, 0.1, 0.1, 1.0);
             // A single fixed light position
             const vec3 light_position = vec3(1.0, 1.0, 1.0);
+            uniform vec4 uBaseColor;
             varying vec3 vVertexPosition;
             varying vec3 vNormal;
             //varying vec2 vTextureCoordinates;
@@ -60,9 +61,9 @@ export const SHADER_PROVIDERS: StaticProvider[] = [
                 vec3 h = normalize(l + v);
 
                 //vec4 c = texture2D(uTexture, vTextureCoordinates);
-                vec4 c = vec4(0.898, 0.815, 0.482, 1.0);
+                //vec4 c = vec4(0.898, 0.815, 0.482, 1.0);
                 float NdotL = clamp(dot(n, l), 0.0, 1.0);
-                gl_FragColor = c * ambient + vec4(c.xyz * NdotL, 1.0);
+                gl_FragColor = uBaseColor * ambient + vec4(uBaseColor.xyz * NdotL, 1.0);
             }`
         }
     },

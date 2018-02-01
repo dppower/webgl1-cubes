@@ -1,38 +1,23 @@
-import { Injectable, Inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 
 import { RenderObject } from "./render-object";
 import { ObjectBuffer } from "./object-buffer";
-//import { Transform } from "./transform";
-//import { Vec3 } from "../maths/vec3";
-//import { Quaternion } from "./quaternion";
-//import { CubeMesh } from "./cube-mesh";
 import { ShaderProgram } from "../shaders/shader-program";
-//import { Camera } from "./game-camera";
 
 @Injectable()
 export class Cube extends RenderObject {
-
-    //get name() {
-    //    return this.token_.toString();
-    //};
-
-    //get transform() {
-    //    return this.transform_;
-    //};
-
-    //private transform_: Transform;
+    
     private uniform_colour_ = new Float32Array([1.0, 1.0, 1.0, 1.0]);
 
-    constructor(/*private token_: OpaqueToken,*/ object_buffer: ObjectBuffer, position?: number[], rotation?: number[]) {
+    constructor(object_buffer: ObjectBuffer, position?: number[], rotation?: number[]) {
         super(object_buffer, position, rotation);
-        //this.transform_ = new Transform(position);
     };
 
     /**
      * Set a unique uniform color for use in the picking renderer, override default color of white.
      */
-    setUniformColor(color: Float32Array) {
-        this.uniform_colour_.set(color);
+    setUniformColor(array: number[]) {
+        this.uniform_colour_.set(array);
     };
 
     loadTexture(gl: WebGLRenderingContext) {
@@ -51,7 +36,7 @@ export class Cube extends RenderObject {
         //texture.src = "textures/cube-texture.png";
     };
 
-    update(dt: number) {
+    updateCube(dt: number) {
         this.transform_.updateTransform();
     };
 
@@ -59,28 +44,9 @@ export class Cube extends RenderObject {
         //shader_program.useProgram(gl);
         this.object_buffer_.bindVertexArray(shader_program);
 
+        gl.uniform4fv(shader_program.getUniform("uBaseColor"), this.uniform_colour_);
+        gl.uniformMatrix4fv(shader_program.getUniform("uTransform"), false, this.transform_.transform.array);
+
+        gl.drawArrays(gl.TRIANGLES, 0, this.object_buffer_.vertex_count);
     };
-};
-
-//const cubes = new Map<OpaqueToken, Cube>();
-
-//const cubes = new OpaqueToken("cubes");
-
-//const cube_001 = new OpaqueToken("cube-001");
-//const cube_002 = new OpaqueToken("cube-002");
-//const cube_003 = new OpaqueToken("cube-003");
-
-//export const cubes_provider = provide(cubes, { useValue: [cube_001, cube_002, cube_003] });
-
-//const cube_factory = (position: Vec3, colour: Float32Array, token: OpaqueToken) => {
-//    return (injector: Injector) => {
-//        let mesh = injector.get(CUBE_MESH);
-//        return new Cube(mesh, colour, token, position);
-//    };
-//};
-
-//export const cubes = [
-//    provide(cube_001, { useFactory: cube_factory(new Vec3(0.0, 0.0, 0.0), new Float32Array([1.0, 0.0, 0.0, 1.0]), cube_001), deps: [Injector, CUBE_MESH] }),
-//    provide(cube_002, { useFactory: cube_factory(new Vec3(2.0, 0.0, -1.0), new Float32Array([0.0, 1.0, 0.0, 1.0]), cube_002), deps: [Injector, CUBE_MESH] }),
-//    provide(cube_003, { useFactory: cube_factory(new Vec3(-2.0, 1.0, -3.0), new Float32Array([0.0, 0.0, 1.0, 1.0]), cube_003), deps: [Injector, CUBE_MESH] })
-//];
+}

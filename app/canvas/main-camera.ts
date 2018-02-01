@@ -84,7 +84,6 @@ export class MainCamera {
     };
 
     updateCamera(dt: number) {
-
         let from_target = this.transform_.position.subtract(this.target_position_);
         this.updateOrthoNormalVectors(from_target.normalise());
 
@@ -114,7 +113,6 @@ export class MainCamera {
 
     updateCameraDistanceFromTarget(dt: number, from_target: Vec3) {
         // Handle zooming
-        //let wheel_direction = this.camera_inputs_.wheel_direction;
         let wheel_direction = this.input_manager_.wheel;
         let current_distance = from_target.length;
 
@@ -163,50 +161,18 @@ export class MainCamera {
         }
 
         return rotation;
-        //let length = Math.sqrt(input_x * input_x + input_y * input_y);
-        //input_x *= length;
-        //input_y *= length;
-        //if (input_x !== 0 || input_y !== 0) {
-        //    let input_rotation = this.getInputRotation(input_x, input_y);
-
-        //    let rotation_angle = this.camera_orbit_velocity * dt;
-        //    let rotation_axis = this.view_forward.cross(input_rotation).normalise();
-        //    let update_rotation = Quaternion.fromAxisAngle(rotation_axis, rotation_angle);
-
-        //    return update_rotation;
-        //}
-        //return new Quaternion();
     };
-
-    getInputRotation(input_x: number, input_y: number) {
-        let input_rotation: Vec3;
-        let scaled_up = this.view_up.scale(input_y);
-        let scaled_right = this.view_right.scale(input_x);
-        let scaled_xy = scaled_right.add(scaled_up);
-
-        let length_squared = scaled_xy.squared_length;
-        if (length_squared < 1.0) {
-            let z_length = Math.sqrt(1.0 - length_squared);
-            let scaled_view = this.view_forward.scale(z_length);
-            input_rotation = scaled_xy.add(scaled_view);
-        }
-        else {
-            input_rotation = scaled_xy.normalise();
-        }
-
-        return input_rotation;
-    };
-
+    
     setProjection() {
-        let aspect = this.input_manager_.aspect;
-        let f = Math.tan(0.5 * (Math.PI - this.yfov));
-        let depth = 1.0 / (this.znear - this.zfar);
+        let a = this.input_manager_.aspect;
+        let f = Math.tan(0.5 * this.yfov);
+        let d = 1.0 / (this.znear - this.zfar);
 
-        this.projection_.array[0] = f / aspect;
-        this.projection_.array[5] = f;
-        this.projection_.array[10] = (this.znear + this.zfar) * depth;
+        this.projection_.array[0] = 1 / (a * f);
+        this.projection_.array[5] = 1 / f;
+        this.projection_.array[10] = (this.znear + this.zfar) * d;
         this.projection_.array[11] = -1.0;
-        this.projection_.array[14] = 2.0 * (this.znear * this.zfar) * depth;
+        this.projection_.array[14] = 2.0 * (this.znear * this.zfar) * d;
     };
 
     setInverseProjection() {

@@ -29,7 +29,6 @@
     <TypeScriptCompile Include="app.module.ts" />
     <TypeScriptCompile Include="canvas\canvas-controller.directive.ts" />
     <TypeScriptCompile Include="canvas\canvas.module.ts" />
-    <TypeScriptCompile Include="canvas\game-camera.ts" />
     <TypeScriptCompile Include="canvas\input-manager.ts" />
     <TypeScriptCompile Include="canvas\main-camera.ts" />
     <TypeScriptCompile Include="canvas\main-canvas.component.ts" />

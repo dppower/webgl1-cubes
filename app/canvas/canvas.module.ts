@@ -10,11 +10,12 @@ import { CanvasController } from "./canvas-controller.directive";
 // Providers
 import { InputManager } from "./input-manager";
 import { RenderLoop } from "./render-loop";
+import { MainCamera } from "./main-camera";
 
 @NgModule({
     imports: [ CommonModule, WebglModule ],
     declarations: [ MainCanvas, CanvasController ],
-    providers: [ InputManager, RenderLoop ],
+    providers: [ InputManager, RenderLoop, MainCamera ],
     exports: [ MainCanvas ]
 })
 export class CanvasModule { };
