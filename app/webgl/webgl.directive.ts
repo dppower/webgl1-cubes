@@ -6,7 +6,7 @@ import { MainCamera } from "../canvas/main-camera";
 import { RenderLoop } from "../canvas/render-loop";
 import { WEBGL, WEBGL_EXTENSIONS } from "./webgl-tokens";
 import { UNIFORM_SHADER, SHADER_PROVIDERS } from "../shaders/shader-providers";
-import { CUBE_PROVIDERS, CUBES } from "../geometry/cube-providers";
+import { CUBE_PROVIDERS, CUBES, PLANE } from "../geometry/cube-providers";
 
 @Directive({
     selector: "[webgl]"
@@ -69,7 +69,7 @@ export class WebglDirective {
                 {
                     provide: SceneRenderer,
                     useClass: SceneRenderer,
-                    deps: [WEBGL, UNIFORM_SHADER, CUBES, MainCamera]
+                    deps: [WEBGL, UNIFORM_SHADER, CUBES, PLANE, MainCamera]
                 },
                 ...SHADER_PROVIDERS,
                 ...CUBE_PROVIDERS

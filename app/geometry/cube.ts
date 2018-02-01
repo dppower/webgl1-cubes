@@ -6,18 +6,9 @@ import { ShaderProgram } from "../shaders/shader-program";
 
 @Injectable()
 export class Cube extends RenderObject {
-    
-    private uniform_colour_ = new Float32Array([1.0, 1.0, 1.0, 1.0]);
-
+        
     constructor(object_buffer: ObjectBuffer, position?: number[], rotation?: number[]) {
         super(object_buffer, position, rotation);
-    };
-
-    /**
-     * Set a unique uniform color for use in the picking renderer, override default color of white.
-     */
-    setUniformColor(array: number[]) {
-        this.uniform_colour_.set(array);
     };
 
     loadTexture(gl: WebGLRenderingContext) {
@@ -38,15 +29,5 @@ export class Cube extends RenderObject {
 
     updateCube(dt: number) {
         this.transform_.updateTransform();
-    };
-
-    drawObject(gl: WebGLRenderingContext, shader_program: ShaderProgram) {
-        //shader_program.useProgram(gl);
-        this.object_buffer_.bindVertexArray(shader_program);
-
-        gl.uniform4fv(shader_program.getUniform("uBaseColor"), this.uniform_colour_);
-        gl.uniformMatrix4fv(shader_program.getUniform("uTransform"), false, this.transform_.transform.array);
-
-        gl.drawArrays(gl.TRIANGLES, 0, this.object_buffer_.vertex_count);
-    };
+    };   
 }

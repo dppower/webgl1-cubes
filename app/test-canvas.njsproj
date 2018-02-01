@@ -40,6 +40,9 @@
     <TypeScriptCompile Include="geometry\cube.ts" />
     <TypeScriptCompile Include="geometry\mesh.ts" />
     <TypeScriptCompile Include="geometry\object-buffer.ts" />
+    <TypeScriptCompile Include="geometry\plane-mesh.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="geometry\render-object.ts" />
     <TypeScriptCompile Include="geometry\transform.ts" />
     <TypeScriptCompile Include="main.ts" />
