@@ -5,15 +5,19 @@ import { ShaderProgram } from "./shader-program";
 import { VertexShaderSource, FragmentShaderSource } from "./shader";
 import { ActiveProgramAttributes } from "./active-program-attributes";
 
-const VERTEX_SHADER = new InjectionToken<VertexShaderSource>("vertex-shader");
-const FRAGMENT_SHADER = new InjectionToken<FragmentShaderSource>("fragment-shader");
+const UNIFORM_VERTEX_SHADER = new InjectionToken<VertexShaderSource>("vertex-shader");
+const UNIFORM_FRAGMENT_SHADER = new InjectionToken<FragmentShaderSource>("fragment-shader");
+
+const BASIC_VERTEX_SHADER = new InjectionToken<VertexShaderSource>("vertex-shader");
+const BASIC_FRAGMENT_SHADER = new InjectionToken<FragmentShaderSource>("fragment-shader");
 
 export const UNIFORM_SHADER = new InjectionToken<ShaderProgram>("uniform shader");
+export const BASIC_SHADER = new InjectionToken<ShaderProgram>("uniform shader");
 
 export const SHADER_PROVIDERS: StaticProvider[] = [
     { provide: ActiveProgramAttributes, useClass: ActiveProgramAttributes, deps: [] },
     {
-        provide: VERTEX_SHADER, useValue: {
+        provide: BASIC_VERTEX_SHADER, useValue: {
             attributes: ["aVertexPosition", "aNormal"],
             uniforms: ["uView", "uProjection", "uTransform"],
             source: `
@@ -38,7 +42,7 @@ export const SHADER_PROVIDERS: StaticProvider[] = [
         }
     },
     {
-        provide: FRAGMENT_SHADER, useValue: {
+        provide: BASIC_FRAGMENT_SHADER, useValue: {
             attributes: [],
             uniforms: ["uBaseColor"],
             source: `
@@ -67,5 +71,42 @@ export const SHADER_PROVIDERS: StaticProvider[] = [
             }`
         }
     },
-    { provide: UNIFORM_SHADER, useClass: ShaderProgram, deps: [WEBGL, VERTEX_SHADER, FRAGMENT_SHADER, ActiveProgramAttributes] }
+    {
+        provide: BASIC_SHADER,
+        useClass: ShaderProgram,
+        deps: [WEBGL, BASIC_VERTEX_SHADER, BASIC_FRAGMENT_SHADER, ActiveProgramAttributes]
+    },
+    {
+        provide: UNIFORM_VERTEX_SHADER, useValue: {
+            attributes: ["aVertexPosition"],
+            uniforms: ["uView", "uProjection", "uTransform"],
+            source: `
+            #version 100
+            attribute vec3 aVertexPosition;
+            uniform mat4 uView;
+            uniform mat4 uProjection;
+            uniform mat4 uTransform;
+            void main(void) {       
+            gl_Position = uProjection * uView * uTransform * vec4(aVertexPosition, 1.0);           
+            }`
+        }
+    },
+    {
+        provide: UNIFORM_FRAGMENT_SHADER, useValue: {
+            attributes: [],
+            uniforms: ["uBaseColor"],
+            source: `
+            #version 100
+            precision mediump float;
+            uniform vec4 uBaseColor;
+            void main(void) {
+            gl_FragColor = uBaseColor;
+            }`
+        }
+    },
+    {
+        provide: UNIFORM_SHADER,
+        useClass: ShaderProgram,
+        deps: [WEBGL, UNIFORM_VERTEX_SHADER, UNIFORM_FRAGMENT_SHADER, ActiveProgramAttributes]
+    }
 ];

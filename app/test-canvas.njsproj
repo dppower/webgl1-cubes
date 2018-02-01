@@ -34,10 +34,8 @@
     <TypeScriptCompile Include="canvas\main-canvas.component.ts" />
     <TypeScriptCompile Include="canvas\render-loop.ts" />
     <TypeScriptCompile Include="geometry\cube-mesh.ts" />
-    <TypeScriptCompile Include="geometry\cube-providers.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="geometry\cube.ts" />
+    <TypeScriptCompile Include="geometry\mesh-providers.ts" />
     <TypeScriptCompile Include="geometry\mesh.ts" />
     <TypeScriptCompile Include="geometry\object-buffer.ts" />
     <TypeScriptCompile Include="geometry\plane-mesh.ts">

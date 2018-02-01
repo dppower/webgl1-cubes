@@ -29,5 +29,17 @@ export class Cube extends RenderObject {
 
     updateCube(dt: number) {
         this.transform_.updateTransform();
-    };   
+    };
+
+    drawBasic(program: ShaderProgram, gl: WebGLRenderingContext) {
+        // Attributes
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.object_buffer_.getBuffer());
+        gl.vertexAttribPointer(program.getAttribute("aVertexPosition"), 3, gl.FLOAT, false, 0, 0);
+
+        // Cube Uniforms
+        gl.uniformMatrix4fv(program.getUniform("uTransform"), false, this.transform_.transform.array);
+        gl.uniform4fv(program.getUniform("uBaseColor"), this.uniform_colour_);
+
+        gl.drawArrays(gl.TRIANGLES, 0, this.object_buffer_.vertex_count);
+    };
 }

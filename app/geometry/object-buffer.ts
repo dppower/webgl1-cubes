@@ -36,6 +36,10 @@ export class ObjectBuffer {
         }
     };
 
+    getBuffer(index = 0) {
+        return this.vertex_buffers_[index];
+    };
+
     bindVertexArray(shader_program: ShaderProgram) {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertex_buffers_[0]);
         this.gl.vertexAttribPointer(

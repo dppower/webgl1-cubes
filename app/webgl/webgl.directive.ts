@@ -2,11 +2,13 @@
 
 import { Subscription } from "rxjs/Subscription";
 import { SceneRenderer } from "../renderers/scene-renderer";
+import { PixelTargetRenderer } from "../renderers/pixel-target-renderer";
 import { MainCamera } from "../canvas/main-camera";
+import { InputManager } from "../canvas/input-manager";
 import { RenderLoop } from "../canvas/render-loop";
 import { WEBGL, WEBGL_EXTENSIONS } from "./webgl-tokens";
-import { UNIFORM_SHADER, SHADER_PROVIDERS } from "../shaders/shader-providers";
-import { CUBE_PROVIDERS, CUBES, PLANE } from "../geometry/cube-providers";
+import { UNIFORM_SHADER, BASIC_SHADER, SHADER_PROVIDERS } from "../shaders/shader-providers";
+import { MESH_PROVIDERS, CUBES, PLANE } from "../geometry/mesh-providers";
 
 @Directive({
     selector: "[webgl]"
@@ -21,7 +23,7 @@ export class WebglDirective {
     private webgl_injector_: Injector;
 
     private scene_renderer_: SceneRenderer;
-    //private pixel_target_renderer: PixelTargetRenderer;
+    private pixel_target_renderer: PixelTargetRenderer;
     //private atmosphere_model: AtmosphereModel;
 
     private update_sub_: Subscription;
@@ -69,15 +71,21 @@ export class WebglDirective {
                 {
                     provide: SceneRenderer,
                     useClass: SceneRenderer,
-                    deps: [WEBGL, UNIFORM_SHADER, CUBES, PLANE, MainCamera]
+                    deps: [WEBGL, BASIC_SHADER, CUBES, PLANE, MainCamera]
+                },
+                {
+                    provide: PixelTargetRenderer,
+                    useClass: PixelTargetRenderer,
+                    deps: [WEBGL, UNIFORM_SHADER, CUBES, MainCamera, InputManager]
                 },
                 ...SHADER_PROVIDERS,
-                ...CUBE_PROVIDERS
+                ...MESH_PROVIDERS
             ];
 
             this.webgl_injector_ = Injector.create(providers, this.parent_injector_);
             this.scene_renderer_ = this.webgl_injector_.get(SceneRenderer);
-            //this.pixel_target_renderer.createFramebuffer();
+            this.pixel_target_renderer = this.webgl_injector_.get(PixelTargetRenderer);
+            this.pixel_target_renderer.createFramebuffer();
             //this.atmosphere_model.preRenderTextures();
             this.begin();
             return true;
@@ -105,7 +113,8 @@ export class WebglDirective {
 
     updateContext(dt: number) {
         this.scene_renderer_.updateScene(dt);
-        //this.pixel_target_renderer.getMouseTarget(canvas_width, canvas_height);
+        this.pixel_target_renderer.checkMouseTarget();
+
     };
 
     drawContext() {

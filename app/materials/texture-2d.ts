@@ -46,13 +46,7 @@ export class Texture2d {
         }
     };
 
-    allocateTextureStorage(url?: string) {
-        if (url) {
-            // fetch from server
-        }
-        else {
-            // Upload no texture data
-            this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.width, this.height, 0, this.gl.RGBA, this.gl.FLOAT, null);
-        }
+    allocateTextureStorage() {       
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.width, this.height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, null);
     };
 };

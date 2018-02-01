@@ -2,9 +2,9 @@ import { Injectable, Inject } from "@angular/core";
 
 import { Cube } from "../geometry/cube";
 import { RenderObject } from "../geometry/render-object";
-import { CUBES, PLANE } from "../geometry/cube-providers";
+import { CUBES, PLANE } from "../geometry/mesh-providers";
 import { ShaderProgram } from "../shaders/shader-program";
-import { UNIFORM_SHADER } from "../shaders/shader-providers";
+import { BASIC_SHADER } from "../shaders/shader-providers";
 import { WEBGL } from "../webgl/webgl-tokens";
 import { MainCamera } from "../canvas/main-camera";
 
@@ -13,14 +13,14 @@ export class SceneRenderer {
     
     constructor(
         @Inject(WEBGL) private gl: WebGLRenderingContext,
-        @Inject(UNIFORM_SHADER) private uniform_shader: ShaderProgram,
+        @Inject(BASIC_SHADER) private shader_: ShaderProgram,
         @Inject(CUBES) private cubes_: Cube[],
         @Inject(PLANE) private plane_: RenderObject,
         private main_camera_: MainCamera
     ) { };
 
     initScene() {
-        this.uniform_shader.initProgram();
+        this.shader_.initProgram();
 
         this.main_camera_.initialiseCamera();
 
@@ -37,7 +37,7 @@ export class SceneRenderer {
 
         //if (!this.textureLoaded_) return;
 
-        this.uniform_shader.useProgram(this.gl);
+        this.shader_.useProgram(this.gl);
 
         // Texture
         //gl.activeTexture(gl.TEXTURE0);
@@ -46,14 +46,14 @@ export class SceneRenderer {
 
         // Camera Uniforms
         this.gl.uniformMatrix4fv(
-            this.uniform_shader.getUniform("uView"), false, this.main_camera_.view.array
+            this.shader_.getUniform("uView"), false, this.main_camera_.view.array
         );
 
         this.gl.uniformMatrix4fv(
-            this.uniform_shader.getUniform("uProjection"), false, this.main_camera_.projection.array
+            this.shader_.getUniform("uProjection"), false, this.main_camera_.projection.array
         );
 
-        this.plane_.drawObject(this.gl, this.uniform_shader);
-        this.cubes_.forEach(cube => cube.drawObject(this.gl, this.uniform_shader));
+        this.plane_.drawObject(this.gl, this.shader_);
+        this.cubes_.forEach(cube => cube.drawObject(this.gl, this.shader_));
     };
 }

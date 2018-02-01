@@ -32,7 +32,7 @@ const bufferFactory = (context: WebGLRenderingContext, mesh: Mesh) => {
     return buffer;
 };
 
-export const CUBE_PROVIDERS: StaticProvider[] = [
+export const MESH_PROVIDERS: StaticProvider[] = [
     { provide: CUBE_MESH, useValue: cube_mesh },
     {
         provide: CUBE_BUFFER,
