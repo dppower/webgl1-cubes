@@ -83,7 +83,6 @@ export class PixelTargetRenderer {
         
         let color = new Uint8Array(4);
         this.gl.readPixels(x, y, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, color);
-        console.log("colour picked: " + color);
 
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
         return color;

@@ -22,11 +22,16 @@ export class SceneRenderer {
     initScene() {
         this.shader_.initProgram();
 
+        this.main_camera_.target_transform = this.cubes_[0].transform;
         this.main_camera_.initialiseCamera();
 
         this.cubes_[0].setUniformColor([1.0, 0.0, 0.0, 1.0]);
         this.cubes_[1].setUniformColor([0.0, 1.0, 0.0, 1.0]);
         this.cubes_[2].setUniformColor([0.0, 0.0, 1.0, 1.0]);
+    };
+
+    setCameraTarget(index: number) {
+        this.main_camera_.target_transform = this.cubes_[index].transform;
     };
 
     updateScene(dt: number) {

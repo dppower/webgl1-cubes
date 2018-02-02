@@ -24,7 +24,6 @@ export class WebglDirective {
 
     private scene_renderer_: SceneRenderer;
     private pixel_target_renderer: PixelTargetRenderer;
-    //private atmosphere_model: AtmosphereModel;
 
     private update_sub_: Subscription;
     private render_sub_: Subscription;
@@ -86,7 +85,7 @@ export class WebglDirective {
             this.scene_renderer_ = this.webgl_injector_.get(SceneRenderer);
             this.pixel_target_renderer = this.webgl_injector_.get(PixelTargetRenderer);
             this.pixel_target_renderer.createFramebuffer();
-            //this.atmosphere_model.preRenderTextures();
+
             this.begin();
             return true;
         }
@@ -111,10 +110,22 @@ export class WebglDirective {
         this.render_loop_.begin();
     };
 
-    updateContext(dt: number) {
-        this.scene_renderer_.updateScene(dt);
-        this.pixel_target_renderer.checkMouseTarget();
+    updateContext(dt: number) {       
+        let color = this.pixel_target_renderer.checkMouseTarget();
 
+        if (color) {
+            if (color[0] === 255) {
+                this.scene_renderer_.setCameraTarget(0);
+            }
+            else if (color[1] === 255) {
+                this.scene_renderer_.setCameraTarget(1);
+            }
+            else if (color[2] === 255) {
+                this.scene_renderer_.setCameraTarget(2);
+            }
+        }
+
+        this.scene_renderer_.updateScene(dt);
     };
 
     drawContext() {
@@ -124,7 +135,6 @@ export class WebglDirective {
         );
 
         this.scene_renderer_.drawScene();
-        //this.atmosphere_model.renderSky(camera);
     };
 
     isExtensionEnabled(extension: string): boolean {

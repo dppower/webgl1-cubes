@@ -50,8 +50,6 @@
     <TypeScriptCompile Include="maths\quaternion.ts" />
     <TypeScriptCompile Include="renderers\pixel-target-renderer.ts" />
     <TypeScriptCompile Include="renderers\scene-renderer.ts" />
-    <TypeScriptCompile Include="renderers\sky-model.ts" />
-    <TypeScriptCompile Include="materials\skybox.ts" />
     <TypeScriptCompile Include="shaders\active-program-attributes.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -61,7 +59,6 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="shaders\shader.ts" />
     <TypeScriptCompile Include="maths\vec3.ts" />
-    <TypeScriptCompile Include="webgl\render-context.ts" />
     <TypeScriptCompile Include="webgl\webgl-tokens.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

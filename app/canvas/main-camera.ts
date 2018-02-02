@@ -18,8 +18,12 @@ export class MainCamera {
 
     get inverse_projection() { return this.inverse_projection_; };
 
-    set target_position(position: Vec3) {
-        this.target_position_ = position;
+    get target_position() {
+        return this.target_transform_.position;
+    };
+
+    set target_transform(target: Transform) {
+        this.target_transform_ = target;
     };
 
     private min_distance_target = 0.5;
@@ -49,7 +53,7 @@ export class MainCamera {
 
     // Transform relative to origin
     private transform_: Transform;
-    private target_position_ = new Vec3(0.0, 0.0, 0.0);
+    private target_transform_: Transform;
 
     constructor(private input_manager_: InputManager) { };
 
@@ -64,7 +68,7 @@ export class MainCamera {
 
         this.updateOrthoNormalVectors(initial_camera_offset.normalise());
 
-        let initial_camera_position = this.target_position_.add(initial_camera_offset).from_array;
+        let initial_camera_position = this.target_position.add(initial_camera_offset).from_array;
         let initial_angle = Math.acos(initial_camera_offset.normalise().scale(-1.0).dot(VEC3_FORWARD));
         let initial_rotation = Quaternion.fromAxisAngle(new Vec3(-1.0, 0.0, 0.0), initial_angle).array;
         
@@ -79,12 +83,8 @@ export class MainCamera {
         this.view_up = this.view_up.normalise();
     };
     
-    setTargetTransform(target_transform: Transform) {
-
-    };
-
     updateCamera(dt: number) {
-        let from_target = this.transform_.position.subtract(this.target_position_);
+        let from_target = this.transform_.position.subtract(this.target_position);
         this.updateOrthoNormalVectors(from_target.normalise());
 
         // Handle zooming
@@ -92,14 +92,14 @@ export class MainCamera {
 
         // Rotate camera position around target
         let updated_rotation = this.updateCameraOrbitPosition(dt);
-        let updated_direction = this.transform_.rotateAround(this.target_position_, updated_rotation);
+        let updated_direction = this.transform_.rotateAround(this.target_position, updated_rotation);
         let rotated_point = updated_direction.scale(updated_distance);
-        let updated_position = this.target_position_.add(rotated_point);
+        let updated_position = this.target_position.add(rotated_point);
         
         this.transform_.setTranslation(updated_position);
 
         // Rotate camera to face target
-        let look_at_rotation = this.transform_.lookAt(this.target_position_);
+        let look_at_rotation = this.transform_.lookAt(this.target_position);
         this.transform_.setOrientation(look_at_rotation);
         
         // Update matrices after transformations
